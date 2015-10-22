@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title> Drug Heatmap </title>
+	<link rel="stylesheet" type="text/css" href="heatmap.css">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/sheetrock.js"></script>
+	<script type="text/javascript" src="js/heatmap.js"></script>
+	<script type="text/javascript" src="js/tabletojson.js"></script>
+	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+	<p>Gene Spreadsheet<input id="URLgene" type="text" size="100" value="Enter your URL ..."/></p>
+	<p>Drug Spreadsheet<input id="URLdrug" type="text" size="100" value="Enter your URL ..."/></p>
+	<p><input id="submit" type="button" value="Submit"/></p>
+	<table id="OriginalDataGene"></table>
+	<table id="OriginalDataDrug"></table>
+	<div id="legend"></div>
+	<div id="DrugType"></div>
+
+	<script type="text/javascript">
+
+		function loadTable() {
+			if($('#OriginalDataGene tr').length < 1 || $('#OriginalDataDrug tr').length < 1) {
+				setTimeout(loadTable, 10);
+			}else{
+				objDataGene = $('#OriginalDataGene').tableToJSON({
+					ignoreHiddenRows:false
+				});
+				objDataDrug = $('#OriginalDataDrug').tableToJSON({
+					ignoreHiddenRows:false
+				});
+				arrKeysGene = fGetKeys(objDataGene[0]);
+				arrKeysDrug = fGetKeys(objDataDrug[0]);
+				genenumber = objDataGene.length;
+				drugnumber = objDataDrug.length;
+				heatmap(objDataGene, objDataDrug);
+			}
+		}
+
+		$(document).ready(function() {
+			loadTable();
+		})
+	</script>
+</body>
+</html>
